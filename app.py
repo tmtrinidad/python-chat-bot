@@ -10,6 +10,7 @@ FONT = "Helvetica 12"
 FONT_BOLD = "Helvetica 11 bold"
 
 class ChatApp: 
+    
     def __init__(self): 
         self.window = Tk()
         self.setup_main_window()
@@ -76,8 +77,7 @@ class ChatApp:
         self.text_widget.configure(state = DISABLED) # Disable it again
 
         msg2 = f"Botty: {get_response(msg)}\n\n"
-
-        
+ 
         self.text_widget.configure(state = NORMAL) # Enable text widget for insert
         self.text_widget.insert(END, msg2)
         self.text_widget.configure(state = DISABLED) # Disable it again
