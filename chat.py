@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------
 # Name:      chat
-# Purpose:   implement a simple chatbot
+# Purpose:   implement a chatbot
 # Author(s): taylor
 # ----------------------------------------------------------------------
 """
@@ -80,86 +80,66 @@ def number_of_special_topics(statement):
     return len(get_similar_topics(statement))
 
 
-def chat_with(name):
+def get_response(res):
     """
-    prompts the user to enter a phrase and then responds accordingly
+    responds accordingly to a message
     :param name: string
-    :return: Boolean
+    :param res: string 
+    :return: string response
     """
     # Enter your code below and take out the pass statement
     # Must use the match statement
 
-    prompt = input('Talk to me please> ')
-    words = prompt.lower().split()
+    words = res.lower().split()
     if check_because(words):
-        print("Is that the real reason?")
-        return False
+        return "Is that the real reason?"
+    
     if number_of_special_topics(words) == 1:
-        print(f"Tell me more about your "
+        return (f"Tell me more about your "
               f"{' '.join(get_similar_topics(words))}.")
-        return False
+    
     if number_of_special_topics(words) > 1:
-        print(f"Tell me more about your "
-              f"{get_similar_topics(words).pop()},"
-              f" {name}.")
-        return False
+        return (f"Tell me more about your  {get_similar_topics(words).pop()}")
+
     match words:
         case['bye' | 'bye.']:
-            return True
+            return "Good bye!"
+        case['hello' | 'hi']: 
+            return "Hello! Talk to me!"
         case['do' | 'can' | 'will' | 'would' as first, 'you', *rest]:
             result = random_choice("yes", "no")
             if result == 'yes':
-                print(f"Yes I {first}.")
+                return f"Yes I {first}."
             else:
                 no_answer = change_person(*tuple(rest))
-                print(f"No {name}, I {first} not"
+                return (f"No, I {first} not"
                       f" {no_answer.strip(string.punctuation)}.")
         case['why', *rest]:
-            print("Why not?")
+            return "Why not?"
         case['how', *rest]:
-            print(random_choice(f"{name}, why do you ask?",
-                                f"{name}, how would an answer to "
-                                f"that help you?"))
+            return(random_choice("Why do you ask?",
+                                 "How would an answer to that help you?"))
         case['what', *rest]:
-            print(random_choice(f"What do you think {name}?",
-                                f"Why is that important {name}?"))
+            return(random_choice("What do you think",
+                                "Why is that important?"))
         case['i', 'need' | 'think' | 'have' | 'want' as second, *rest]:
-            print(f"Why do you {second} "
+            return(f"Why do you {second} "
                   f"{change_person(*rest).strip(string.punctuation)}?")
         case['i', *middle, last]:
             last = last.strip(string.punctuation)
             if last != 'too':
-                print(f"I {' '.join(middle)} {last} too.")
+                return f"I {' '.join(middle)} {last} too."
             else:
-                print(random_choice("That's interesting", "Can you elaborate "
+                return (random_choice("That's interesting", "Can you elaborate "
                                                           "on that?",
                                     "That's nice!"))
         case['tell'|'give' | 'say' as verb, *rest]:
-            print(f"You {verb} {' '.join(rest).strip(string.punctuation)}.")
+            return f"You {verb} {' '.join(rest).strip(string.punctuation)}."
         case _:
             if words[-1][-1] == '?':
-                print(random_choice("I have no clue.", "Maybe."))
+                return random_choice("I have no clue.", "Maybe.")
             else:
-                print(random_choice("That's interesting", "Can you elaborate "
+                return (random_choice("That's interesting", "Can you elaborate "
                                     "on that?",
                                     "That's nice!"))
-
-
-def main():
-    # Enter your code following the outline below and take out the
-    # pass statement.
-    # 1.Prompt the user for their name
-    # 2.Call chat_with repeatedly passing the name as argument
-    # 3.When chat_with returns True, print the goodbye message.
-    #
-
-    name = input('Hello. What is your name please? ')
-    done = False
-    while not done:
-        done = chat_with(name)
-    if done:
-        print(f"Bye {name}! Have a great day!")
-
-
-if __name__ == '__main__':
-    main()
+            
